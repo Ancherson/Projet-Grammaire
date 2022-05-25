@@ -13,29 +13,28 @@ and initialstate =  Initialstate of string
 and initialstack = Initialstack of string
 
 and suitelettres_nonvide = 
-| Suitelettres_nonvide of string 
+| Lettre_nonvide of string 
 | Suitelettres_nonvide of string * suitelettres_nonvide
 
 and transitions = Transitions of translist
 
 and translist = 
-| Translist of None
+| None
 | Translist of transition * translist
 
 and transition = Transition of string * lettre_ou_vide * string * string * stack
 
 and lettre_ou_vide = 
-| Lettre_ou_vide of None
+| None
 | Lettre_ou_vide of string
 
 and stack =
-| Stack of None
+| None
 | Stack of nonemptystack 
 
 and nonemptystack = 
-| Nonemptystack of None
+| Monostack of string
 | Nonemptystack of  string * nonemptystack 
-
 
 (* let rec as_lettre = function
 
