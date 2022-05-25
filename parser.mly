@@ -39,7 +39,7 @@ suitelettres_nonvide  :
 
 transitions :
   TRANS l=translist  {Transitions(l)}
-
+bnobnji
 translist  :
   | None {Translist()}
   | t=transition tl=translist {Translist(t,tl)}
