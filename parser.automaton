@@ -1,0 +1,447 @@
+State 0:
+## Known stack suffix:
+##
+## LR(1) items:
+input' -> . input [ # ]
+## Transitions:
+-- On INPUT_SY shift to state 1
+-- On inputsymbols shift to state 6
+-- On input shift to state 19
+-- On declaration shift to state 20
+-- On automate shift to state 42
+## Reductions:
+
+State 1:
+## Known stack suffix:
+## INPUT_SY
+## LR(1) items:
+inputsymbols -> INPUT_SY . suitelettres_nonvide [ STACK_SY ]
+## Transitions:
+-- On LETTRE shift to state 2
+-- On suitelettres_nonvide shift to state 5
+## Reductions:
+
+State 2:
+## Known stack suffix:
+## LETTRE
+## LR(1) items:
+suitelettres_nonvide -> LETTRE . [ STATES STACK_SY INIT_STATE ]
+suitelettres_nonvide -> LETTRE . VIRGU suitelettres_nonvide [ STATES STACK_SY INIT_STATE ]
+## Transitions:
+-- On VIRGU shift to state 3
+## Reductions:
+-- On STATES STACK_SY INIT_STATE
+--   reduce production suitelettres_nonvide -> LETTRE
+
+State 3:
+## Known stack suffix:
+## LETTRE VIRGU
+## LR(1) items:
+suitelettres_nonvide -> LETTRE VIRGU . suitelettres_nonvide [ STATES STACK_SY INIT_STATE ]
+## Transitions:
+-- On LETTRE shift to state 2
+-- On suitelettres_nonvide shift to state 4
+## Reductions:
+
+State 4:
+## Known stack suffix:
+## LETTRE VIRGU suitelettres_nonvide
+## LR(1) items:
+suitelettres_nonvide -> LETTRE VIRGU suitelettres_nonvide . [ STATES STACK_SY INIT_STATE ]
+## Transitions:
+## Reductions:
+-- On STATES STACK_SY INIT_STATE
+--   reduce production suitelettres_nonvide -> LETTRE VIRGU suitelettres_nonvide
+
+State 5:
+## Known stack suffix:
+## INPUT_SY suitelettres_nonvide
+## LR(1) items:
+inputsymbols -> INPUT_SY suitelettres_nonvide . [ STACK_SY ]
+## Transitions:
+## Reductions:
+-- On STACK_SY
+--   reduce production inputsymbols -> INPUT_SY suitelettres_nonvide
+
+State 6:
+## Known stack suffix:
+## inputsymbols
+## LR(1) items:
+declaration -> inputsymbols . stacksymbols states initialstate initialstack [ TRANS ]
+## Transitions:
+-- On STACK_SY shift to state 7
+-- On stacksymbols shift to state 9
+## Reductions:
+
+State 7:
+## Known stack suffix:
+## STACK_SY
+## LR(1) items:
+stacksymbols -> STACK_SY . suitelettres_nonvide [ STATES ]
+## Transitions:
+-- On LETTRE shift to state 2
+-- On suitelettres_nonvide shift to state 8
+## Reductions:
+
+State 8:
+## Known stack suffix:
+## STACK_SY suitelettres_nonvide
+## LR(1) items:
+stacksymbols -> STACK_SY suitelettres_nonvide . [ STATES ]
+## Transitions:
+## Reductions:
+-- On STATES
+--   reduce production stacksymbols -> STACK_SY suitelettres_nonvide
+
+State 9:
+## Known stack suffix:
+## inputsymbols stacksymbols
+## LR(1) items:
+declaration -> inputsymbols stacksymbols . states initialstate initialstack [ TRANS ]
+## Transitions:
+-- On STATES shift to state 10
+-- On states shift to state 12
+## Reductions:
+
+State 10:
+## Known stack suffix:
+## STATES
+## LR(1) items:
+states -> STATES . suitelettres_nonvide [ INIT_STATE ]
+## Transitions:
+-- On LETTRE shift to state 2
+-- On suitelettres_nonvide shift to state 11
+## Reductions:
+
+State 11:
+## Known stack suffix:
+## STATES suitelettres_nonvide
+## LR(1) items:
+states -> STATES suitelettres_nonvide . [ INIT_STATE ]
+## Transitions:
+## Reductions:
+-- On INIT_STATE
+--   reduce production states -> STATES suitelettres_nonvide
+
+State 12:
+## Known stack suffix:
+## inputsymbols stacksymbols states
+## LR(1) items:
+declaration -> inputsymbols stacksymbols states . initialstate initialstack [ TRANS ]
+## Transitions:
+-- On INIT_STATE shift to state 13
+-- On initialstate shift to state 15
+## Reductions:
+
+State 13:
+## Known stack suffix:
+## INIT_STATE
+## LR(1) items:
+initialstate -> INIT_STATE . LETTRE [ INIT_STACK ]
+## Transitions:
+-- On LETTRE shift to state 14
+## Reductions:
+
+State 14:
+## Known stack suffix:
+## INIT_STATE LETTRE
+## LR(1) items:
+initialstate -> INIT_STATE LETTRE . [ INIT_STACK ]
+## Transitions:
+## Reductions:
+-- On INIT_STACK
+--   reduce production initialstate -> INIT_STATE LETTRE
+
+State 15:
+## Known stack suffix:
+## inputsymbols stacksymbols states initialstate
+## LR(1) items:
+declaration -> inputsymbols stacksymbols states initialstate . initialstack [ TRANS ]
+## Transitions:
+-- On INIT_STACK shift to state 16
+-- On initialstack shift to state 18
+## Reductions:
+
+State 16:
+## Known stack suffix:
+## INIT_STACK
+## LR(1) items:
+initialstack -> INIT_STACK . LETTRE [ TRANS ]
+## Transitions:
+-- On LETTRE shift to state 17
+## Reductions:
+
+State 17:
+## Known stack suffix:
+## INIT_STACK LETTRE
+## LR(1) items:
+initialstack -> INIT_STACK LETTRE . [ TRANS ]
+## Transitions:
+## Reductions:
+-- On TRANS
+--   reduce production initialstack -> INIT_STACK LETTRE
+
+State 18:
+## Known stack suffix:
+## inputsymbols stacksymbols states initialstate initialstack
+## LR(1) items:
+declaration -> inputsymbols stacksymbols states initialstate initialstack . [ TRANS ]
+## Transitions:
+## Reductions:
+-- On TRANS
+--   reduce production declaration -> inputsymbols stacksymbols states initialstate initialstack
+
+State 19:
+## Known stack suffix:
+## input
+## LR(1) items:
+input' -> input . [ # ]
+## Transitions:
+## Reductions:
+-- On #
+--   accept input
+
+State 20:
+## Known stack suffix:
+## declaration
+## LR(1) items:
+automate -> declaration . transitions [ EOF ]
+## Transitions:
+-- On TRANS shift to state 21
+-- On transitions shift to state 41
+## Reductions:
+
+State 21:
+## Known stack suffix:
+## TRANS
+## LR(1) items:
+transitions -> TRANS . translist [ EOF ]
+## Transitions:
+-- On LPAREN shift to state 22
+-- On translist shift to state 38
+-- On transition shift to state 39
+## Reductions:
+-- On EOF
+--   reduce production translist ->
+
+State 22:
+## Known stack suffix:
+## LPAREN
+## LR(1) items:
+transition -> LPAREN . LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On LETTRE shift to state 23
+## Reductions:
+
+State 23:
+## Known stack suffix:
+## LPAREN LETTRE
+## LR(1) items:
+transition -> LPAREN LETTRE . VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On VIRGU shift to state 24
+## Reductions:
+
+State 24:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU . lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On LETTRE shift to state 25
+-- On lettre_ou_vide shift to state 26
+## Reductions:
+-- On VIRGU
+--   reduce production lettre_ou_vide ->
+
+State 25:
+## Known stack suffix:
+## LETTRE
+## LR(1) items:
+lettre_ou_vide -> LETTRE . [ VIRGU ]
+## Transitions:
+## Reductions:
+-- On VIRGU
+--   reduce production lettre_ou_vide -> LETTRE
+
+State 26:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU lettre_ou_vide
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU lettre_ou_vide . VIRGU LETTRE VIRGU LETTRE VIRGU stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On VIRGU shift to state 27
+## Reductions:
+
+State 27:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU lettre_ou_vide VIRGU
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU lettre_ou_vide VIRGU . LETTRE VIRGU LETTRE VIRGU stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On LETTRE shift to state 28
+## Reductions:
+
+State 28:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE . VIRGU LETTRE VIRGU stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On VIRGU shift to state 29
+## Reductions:
+
+State 29:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU . LETTRE VIRGU stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On LETTRE shift to state 30
+## Reductions:
+
+State 30:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE . VIRGU stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On VIRGU shift to state 31
+## Reductions:
+
+State 31:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU . stack RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On LETTRE shift to state 32
+-- On stack shift to state 35
+-- On nonemptystack shift to state 37
+## Reductions:
+-- On RPAREN
+--   reduce production stack ->
+
+State 32:
+## Known stack suffix:
+## LETTRE
+## LR(1) items:
+nonemptystack -> LETTRE . [ RPAREN ]
+nonemptystack -> LETTRE . POINTVIR nonemptystack [ RPAREN ]
+## Transitions:
+-- On POINTVIR shift to state 33
+## Reductions:
+-- On RPAREN
+--   reduce production nonemptystack -> LETTRE
+
+State 33:
+## Known stack suffix:
+## LETTRE POINTVIR
+## LR(1) items:
+nonemptystack -> LETTRE POINTVIR . nonemptystack [ RPAREN ]
+## Transitions:
+-- On LETTRE shift to state 32
+-- On nonemptystack shift to state 34
+## Reductions:
+
+State 34:
+## Known stack suffix:
+## LETTRE POINTVIR nonemptystack
+## LR(1) items:
+nonemptystack -> LETTRE POINTVIR nonemptystack . [ RPAREN ]
+## Transitions:
+## Reductions:
+-- On RPAREN
+--   reduce production nonemptystack -> LETTRE POINTVIR nonemptystack
+
+State 35:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU stack
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU stack . RPAREN [ LPAREN EOF ]
+## Transitions:
+-- On RPAREN shift to state 36
+## Reductions:
+
+State 36:
+## Known stack suffix:
+## LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU stack RPAREN
+## LR(1) items:
+transition -> LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU stack RPAREN . [ LPAREN EOF ]
+## Transitions:
+## Reductions:
+-- On LPAREN EOF
+--   reduce production transition -> LPAREN LETTRE VIRGU lettre_ou_vide VIRGU LETTRE VIRGU LETTRE VIRGU stack RPAREN
+
+State 37:
+## Known stack suffix:
+## nonemptystack
+## LR(1) items:
+stack -> nonemptystack . [ RPAREN ]
+## Transitions:
+## Reductions:
+-- On RPAREN
+--   reduce production stack -> nonemptystack
+
+State 38:
+## Known stack suffix:
+## TRANS translist
+## LR(1) items:
+transitions -> TRANS translist . [ EOF ]
+## Transitions:
+## Reductions:
+-- On EOF
+--   reduce production transitions -> TRANS translist
+
+State 39:
+## Known stack suffix:
+## transition
+## LR(1) items:
+translist -> transition . translist [ EOF ]
+## Transitions:
+-- On LPAREN shift to state 22
+-- On translist shift to state 40
+-- On transition shift to state 39
+## Reductions:
+-- On EOF
+--   reduce production translist ->
+
+State 40:
+## Known stack suffix:
+## transition translist
+## LR(1) items:
+translist -> transition translist . [ EOF ]
+## Transitions:
+## Reductions:
+-- On EOF
+--   reduce production translist -> transition translist
+
+State 41:
+## Known stack suffix:
+## declaration transitions
+## LR(1) items:
+automate -> declaration transitions . [ EOF ]
+## Transitions:
+## Reductions:
+-- On EOF
+--   reduce production automate -> declaration transitions
+
+State 42:
+## Known stack suffix:
+## automate
+## LR(1) items:
+input -> automate . EOF [ # ]
+## Transitions:
+-- On EOF shift to state 43
+## Reductions:
+
+State 43:
+## Known stack suffix:
+## automate EOF
+## LR(1) items:
+input -> automate EOF . [ # ]
+## Transitions:
+## Reductions:
+-- On #
+--   reduce production input -> automate EOF
+

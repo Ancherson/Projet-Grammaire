@@ -12,11 +12,11 @@ rule main = parse
   | "initial stack symbol:" {INIT_STACK}
   | ')'            { RPAREN }
   | '('            { LPAREN }
+  | ';'            {POINTVIR}
   | ','             { VIRGU }
   | "initial state:" {INIT_STATE}
   | "states:"     {STATES}
   | "transitions:" {TRANS}
-  | ''              {EPSILON}
-  | lettre as c     { LETTRE(c) }
+  | lettre      { LETTRE(Lexing.lexeme lexbuf) }
   | eof            { EOF }
-  | _            { failwith "unexpected character" }
+  | _            { failwith ("unexpected character: " ^Lexing.lexeme lexbuf) }
