@@ -69,12 +69,13 @@ let get_first_trans (transis : translist) : transition=
 ;;
 
 
-let explode s =
+let explode s  : string list=
   let rec exp i l =
-    if i < 0 then l else exp (i - 1) (s.[i] :: l) in
+    if i < 0 then l else exp (i - 1) ((String.make 1 s.[i]) :: l) in
   exp (String.length s - 1) []
 ;;
 
-(* let eval_mot (mot : string) (auto : ast) =
-  match ast with
-  |(decla,transis) ->  *)
+(* let eval_mot (mot : string list) (auto : ast) =
+  match mot with
+  |symbole::reste ->
+  *)
