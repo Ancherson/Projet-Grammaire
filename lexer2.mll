@@ -11,6 +11,7 @@ rule main = parse
   | "stack symbols:" {STACK_SY}
   | "initial stack symbol:" {INIT_STACK}
   | "case"           {CASE}
+  | "program:"       {PROGRAM}
   | "state"          {STATE}
   | "of"             {OF}
   | "next"           {NEXT}
