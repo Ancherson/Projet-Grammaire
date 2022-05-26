@@ -1,9 +1,5 @@
 open Ast;;
 
-let lexbuf = Lexing.from_channel stdin 
-
-let ast = Parser.input Lexer.main lexbuf 
-
 
 
 let is_from_state (trans : transition) (state : string) : bool =
@@ -49,6 +45,17 @@ let rec get_transis_from_stack (transis : translist) (stack : string) : translis
 ;;
 
 
+
+
+
+ let rec eval_mot (mot : string list) (auto : automate) (stack: string Stack.t) (state:string) :unit =
+  match mot with
+  |symbole::reste -> eval_mot reste auto stack state
+  |[] -> print_string "fin"
+;;
+
+
+
 let get_initial_state (decla : declaration) : string =
   match decla with 
   |Declaration (_,_,_,ini_stat,_) -> match ini_stat with
@@ -61,6 +68,11 @@ let get_initial_stack (decla : declaration) : string =
                                     |Initialstack(init) -> init
 ;;
 
+let get_declaration (auto:automate) : declaration =
+  match auto with
+  |Automate(decla,_) -> decla
+;;
+
 
 let get_first_trans (transis : translist) : transition=
   match transis with 
@@ -68,14 +80,28 @@ let get_first_trans (transis : translist) : transition=
   |_ -> failwith("pas de transition dispo")
 ;;
 
-
 let explode s  : string list=
   let rec exp i l =
     if i < 0 then l else exp (i - 1) ((String.make 1 s.[i]) :: l) in
   exp (String.length s - 1) []
 ;;
 
-(* let eval_mot (mot : string list) (auto : ast) =
-  match mot with
-  |symbole::reste ->
-  *)
+let init (word:string) :unit = 
+  let lexbuf = Lexing.from_channel stdin in 
+  let ast = Parser.input Lexer.main lexbuf in 
+  let current_stack =  Stack.create() in
+  let current_state =  get_initial_state (get_declaration ast) in
+  let mot = explode word in
+
+  Stack.push (get_initial_stack (get_declaration ast)) current_stack;
+  eval_mot mot ast current_stack current_state
+;;
+
+
+let main () =
+  match Sys.argv with
+  |[|_;word|] ->  init word
+  |_ -> print_string "need a word"
+;;
+(* lancement de ce main *)
+let () = main () ;;
