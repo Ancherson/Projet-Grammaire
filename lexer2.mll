@@ -18,8 +18,6 @@ rule main = parse
   | "push"          {PUSH}
   | "change"        {CHANGE}
   | "pop"            {POP}
-  | ')'            { RPAREN }
-  | '('            { LPAREN }
   | ';'            {POINTVIR}
   | ':'             {DEUXPO}
   | ','             {VIRGU}
