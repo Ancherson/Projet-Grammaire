@@ -10,15 +10,16 @@ rule main = parse
   | "input symbols:" {INPUT_SY}
   | "stack symbols:" {STACK_SY}
   | "initial stack symbol:" {INIT_STACK}
-  | "case"           {CASE}
   | "program:"       {PROGRAM}
-  | "state"          {STATE}
-  | "of"             {OF}
+  | "case"           {CASE}
   | "next"           {NEXT}
+  | "top"           {TOP}
+  | "of"             {OF}
+  | "state"         {STATE}
   | "push"          {PUSH}
   | "change"        {CHANGE}
   | "pop"            {POP}
-  | ';'            {POINTVIR}
+  | "reject"         {REJECT}
   | ':'             {DEUXPO}
   | ','             {VIRGU}
   | "begin"         {BEGIN}

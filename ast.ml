@@ -36,11 +36,5 @@ and nonemptystack =
 | Monostack of string
 | Nonemptystack of  string * nonemptystack 
 
-(* let rec as_lettre = function
 
-
-and apply op l r = 
-
-and apply_decl var l r =
-"( let " ^ as_lettre var ^ " = " ^ as_lettre l ^ " in " ^ as_lettre r ^ ")" *)
 

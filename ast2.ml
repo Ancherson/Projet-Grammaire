@@ -1,4 +1,4 @@
-type automate = Automate of  declaration * transitions
+type automate = Automate of  declaration * program
 
 and declaration = Declaration of inputsymbols * stacksymbols * states * initialstate * initialstack
 
@@ -17,39 +17,22 @@ and suitelettres_nonvide =
 | Suitelettres_nonvide of string * suitelettres_nonvide
 
 and program = 
-| Program of caseslist
-
-and caseslist = 
-| None
-|caseslist of case * caseslist
+| Program of case
 
 and case = 
+| State of string * case
+| Top of string * case
+| Next of string * action
 
-(*and transitions = Transitions of translist
+and action =
+|Action of string
+|Action of string * string
 
-and translist = 
-| None
-| Translist of transition * translist
 
-and transition = Transition of string * lettre_ou_vide * string * string * stack
-*)
 and lettre_ou_vide = 
 | None
 | Lettre_ou_vide of string
 
-and stack =
-| None
-| Stack of nonemptystack 
-
-and nonemptystack = 
-| Monostack of string
-| Nonemptystack of  string * nonemptystack 
-
-(* let rec as_lettre = function
 
 
-and apply op l r = 
-
-and apply_decl var l r =
-"( let " ^ as_lettre var ^ " = " ^ as_lettre l ^ " in " ^ as_lettre r ^ ")" *)
 
