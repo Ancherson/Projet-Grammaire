@@ -4,16 +4,20 @@ la partie 3 se compile seule en tapant `make` depuis le repertoire `partie-3`
 
 Les parties 1 et 2 se compilent en tapant `make` depuis la racine du depot.
 
+
 ### Lancement
 
 - Pour tester l'étape 1 et 2, il suffit de lancer le parser avec la commande `./parser <input.txt <mot>` ou `parser` est l'executable du fichier `parser.mly` et `input.txt` est un exemple d'automate et `mot` est le mot à tester 
 
 - Pour tester l'étape 3, il suffit aussi de lancer le parser avec la commande `./parser <input.txt` ou `parser` est l'executable du fichier `parser.mly` et `input.txt` est un exemple d'automate.
 
+
 ### Réalisation
 
 Nous avons traité toutes les étapes demandées, cependant, la grammaire de l'étape 3 n'est pas LR(1).
 
+
 ### Répartition du travail
 
 Nous avons traité la partie 1 ainsi que la partie 3 ensemble. Concernant la partie 2, Jules s'en est occupé.
+
