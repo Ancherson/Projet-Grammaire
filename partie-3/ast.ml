@@ -24,14 +24,38 @@ and caselist =
 |Caselist of case * caselist
 
 and case = 
-| State of string * caselist
-| Top of string * caselist
-| Next of string * action
+| Statess of stateslist
+| Tops of  toplist
+| Nexts of actionlist
+
+and stateslist =
+|None
+|Stateslist of state * stateslist
+
+and state =
+State of string * case
+
+and toplist =
+|None
+|Toplist of top * toplist
+
+and top =
+|Top of string * case
+|Top_action of string * action
+
+and actionlist=
+|None
+|Actionlist of action * actionlist
 
 and action =
-|Action of string
-|Action of string * string
-
+|Pop_epsilon
+|Reject_espilon
+|Change_espilon of string
+|Push_espilon of string
+|Pop of string
+|Reject of string 
+|Change of string * string
+|Push of string * string
 
 and lettre_ou_vide = 
 | None

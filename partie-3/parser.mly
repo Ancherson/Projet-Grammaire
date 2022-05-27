@@ -41,17 +41,41 @@ program :
   PROGRAM c = caselist {Program(c)}
 
 caselist:
-  |{None}
-  |c=case cl=caselist {Caselist(c,cl)}
+  |  {None}
+  | c=case cl=caselist {Caselist(c,cl)}
 
 case :
-  |CASE STATE OF l=LETTRE DEUXPO BEGIN cl=caselist END {State(l,cl)}
-  |CASE TOP OF l=LETTRE DEUXPO BEGIN cl=caselist END {TOP(l,cl)}
-  |CASE NEXT OF l=LETTRE DEUXPO a=action {Next(l,a)}
+  |CASE STATE OF sl = stateslist {Statess(sl)}
+  |CASE TOP OF tl = toplist {Tops(tl)}
+  |CASE NEXT OF al = actionlist {Nexts(al)}
+
+stateslist:
+  |{None}
+  |s = state st=stateslist {Stateslist(s,st)} 
+
+state :
+  l=LETTRE DEUXPO BEGIN c=case END {State(l,c)}
+
+toplist :
+|{None}
+| t=top tl=toplist {Toplist(t,tl)}
+
+top :
+  |l=LETTRE DEUXPO BEGIN c=case END {Top(l,c)}
+  |l=LETTRE DEUXPO a=action {Top_action(l,a)}
+
+actionlist :
+|{None}
+| a=action al=actionlist {Actionlist(a,al)}
 
 action :
-  |p=POP {Action(p)}
-  |r=REJECT {ACTION(r)}
-  |c=CHANGE l=LETTRE {Action(c,l)}
-  |p=PUSH l=LETTRE {Action(p,l)}
+  |POP {Pop_epsilon}
+  |REJECT {Reject_espilon}
+  |CHANGE ll=LETTRE {Change_espilon(ll)}
+  |PUSH ll=LETTRE {Push_espilon(ll)}
+  |l=LETTRE DEUXPO POP {Pop(l)}
+  |l=LETTRE DEUXPO REJECT {Reject(l)}
+  |l=LETTRE DEUXPO CHANGE ll=LETTRE {Change(l,ll)}
+  |l=LETTRE DEUXPO PUSH ll=LETTRE {Push(l,ll)}
+
 
