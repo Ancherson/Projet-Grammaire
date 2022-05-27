@@ -17,11 +17,15 @@ and suitelettres_nonvide =
 | Suitelettres_nonvide of string * suitelettres_nonvide
 
 and program = 
-| Program of case
+| Program of caselist
+
+and caselist =
+|None
+|Caselist of case * caselist
 
 and case = 
-| State of string * case
-| Top of string * case
+| State of string * caselist
+| Top of string * caselist
 | Next of string * action
 
 and action =

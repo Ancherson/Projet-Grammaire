@@ -43,7 +43,7 @@ transitions :
 translist  :
   |  {None}
   | t=transition tl=translist {Translist(t,tl)}
-  // rajouter des COMMA " ; " dans transition comme precisé dans l'enoncé
+
 transition :
   LPAREN l1=LETTRE VIRGU lv=lettre_ou_vide VIRGU l2=LETTRE VIRGU l3=LETTRE VIRGU s=stack RPAREN {Transition(l1,lv,l2,l3,s)}
 

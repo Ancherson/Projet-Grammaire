@@ -2,7 +2,7 @@
 open Ast
 %}
 
-%token POINTVIR LPAREN PROGRAM RPAREN EOF VIRGU INPUT_SY CASE STATE OF NEXT PUSH CHANGE POP DEUXPO BEGIN END STACK_SY INIT_STATE INIT_STACK STATES TRANS
+%token PROGRAM EOF VIRGU INPUT_SY CASE STATE OF NEXT PUSH CHANGE POP DEUXPO BEGIN END STACK_SY INIT_STATE INIT_STACK STATES REJECT TOP
 %token<string> LETTRE
 
 %start<Ast.automate> input
@@ -13,7 +13,7 @@ open Ast
 input: c = automate EOF {c}
 
 automate :
- d=declaration t=transitions {Automate(d,t)}
+ d=declaration p=program {Automate(d,p)}
 
 declaration :
   i=inputsymbols s=stacksymbols st=states isti=initialstate istk=initialstack {Declaration(i,s,st,isti,istk)}
@@ -38,28 +38,20 @@ suitelettres_nonvide  :
   | l=LETTRE VIRGU s=suitelettres_nonvide {Suitelettres_nonvide(l,s)}
 
 program : 
-  PROGRAM p = caseslist {Program(p)}
+  PROGRAM c = caselist {Program(c)}
 
-caseslist :
-  | {None}
-  |  c = case cl = caseslist {Caseslist(c,cl)}
+caselist:
+  |{None}
+  |c=case cl=caselist {Caselist(c,cl)}
 
 case :
-  |CASE c = case cl = caseslist {Caseslist(c,cl)}
-  (* un case peut contenir un (state etc) ou bien une listes de cases *)
+  |CASE STATE OF l=LETTRE DEUXPO BEGIN cl=caselist END {State(l,cl)}
+  |CASE TOP OF l=LETTRE DEUXPO BEGIN cl=caselist END {TOP(l,cl)}
+  |CASE NEXT OF l=LETTRE DEUXPO a=action {Next(l,a)}
 
-casetype :
-  |NEXT OF {}
-  |PUSH OF {}
+action :
+  |p=POP {Action(p)}
+  |r=REJECT {ACTION(r)}
+  |c=CHANGE l=LETTRE {Action(c,l)}
+  |p=PUSH l=LETTRE {Action(p,l)}
 
-lettre_ou_vide :
-  |  {None}
-  | l=LETTRE {Lettre_ou_vide(l)}
-
-stack :
-  |  {None}
-  | s=nonemptystack {Stack(s)}
-
-nonemptystack :
-  | l=LETTRE {Monostack(l) }
-  | l=LETTRE POINTVIR ns=nonemptystack {Nonemptystack (l,ns)}
