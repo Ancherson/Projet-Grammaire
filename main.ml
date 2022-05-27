@@ -190,10 +190,8 @@ let is_deterministe (symbol:lettre_ou_vide list) (stack:string list) (state:stri
   let rec is_deterministe_rec (symbol:lettre_ou_vide list) (stack:string list) (o_stack:string list)
   (state:string list) (o_state:string list) (transis:translist) :bool =  
     match symbol with 
-    |x::l1 -> (print_lettre (x);
-                match stack with 
-                |y::l2 -> (
-                          match state with
+    |x::l1 -> (match stack with 
+                |y::l2 -> (match state with
                           |z::l3 -> ((count_elem_tranlist (get_transis_from_symbol (get_transis_from_stack (get_transis_from_state transis z) y) x)) < 2)  
                                     && is_deterministe_rec symbol  stack o_stack l3 o_state transis
                           |[] -> is_deterministe_rec symbol l2 o_stack o_state o_state transis)
@@ -201,7 +199,7 @@ let is_deterministe (symbol:lettre_ou_vide list) (stack:string list) (state:stri
                 |[] -> is_deterministe_rec l1 o_stack o_stack o_state o_state transis)
                 
     |[] -> true
-    in is_deterministe_rec symbol stack stack state state transis
+    in is_deterministe_rec (None::symbol) stack stack state state transis
 ;;
 
 let explode s  : lettre_ou_vide list=
@@ -229,7 +227,7 @@ let launch (word:string) :unit =
 
   let transis = get_transis ast in
 
-  if not(is_deterministe (None::symbol) stack state transis) then failwith("Automate pas deterministe");
+  if not(is_deterministe symbol stack state transis) then failwith("Automate pas deterministe");
 
 
   let current_stack =  Stack.create() in
