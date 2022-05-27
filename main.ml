@@ -87,10 +87,12 @@ let rec get_transis_from_stack (transis : translist) (stack : string) : translis
   |_ -> None
 ;;
 
-let get_first_trans (transis : translist) : transition=
+let get_first_trans (symbol : lettre_ou_vide) (transis : translist) : transition=
   match transis with 
   |Translist(trans,_) -> trans
-  |None -> failwith("pas de transition dispo")
+  |None -> if symbol = None
+            then failwith("l’entrée est épuisée sans que la pile soit vide")
+            else failwith("il n’y a aucune transition qui s’applique")
 ;;
 
 let rec eval_symbol (symbol : lettre_ou_vide) (transis : translist) (stack : string Stack.t) (state : string) : string Stack.t * string =
@@ -102,7 +104,7 @@ let rec eval_symbol (symbol : lettre_ou_vide) (transis : translist) (stack : str
 
   else let current_stack = Stack.pop stack in
 
-  match get_first_trans (get_transis_from_symbol (get_transis_from_stack (get_transis_from_state transis state) current_stack) symbol) with 
+  match get_first_trans symbol (get_transis_from_symbol (get_transis_from_stack (get_transis_from_state transis state) current_stack) symbol) with 
   |Transition(_,sy,_,new_state,new_stack) -> if sy = None 
                                             then eval_symbol symbol transis (push_stack stack new_stack) new_state
                                             else (push_stack stack new_stack,new_state)
@@ -151,7 +153,7 @@ let explode s  : lettre_ou_vide list=
   exp (String.length s - 1) []
 ;;
 
-let init (word:string) :unit = 
+let launch (word:string) :unit = 
   let lexbuf = Lexing.from_channel stdin in 
   let ast = Parser.input Lexer.main lexbuf in 
   let current_stack =  Stack.create() in
@@ -165,7 +167,7 @@ let init (word:string) :unit =
 
 let main () =
   match Sys.argv with
-  |[|_;word|] ->  init word
+  |[|_;word|] ->  launch word
   |_ -> print_string "need a single word\n"
 ;;
 (* lancement de ce main *)
