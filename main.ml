@@ -146,6 +146,63 @@ let get_transis (auto:automate) : translist =
                           |Transitions(transis) -> transis
 ;;
 
+let rec get_string_from_suite (su:suitelettres_nonvide) :string =
+  match su with 
+  |Lettre_nonvide(s) -> s
+  |Suitelettres_nonvide(s,su2) -> s ^ (get_string_from_suite su2)
+;;
+
+let get_input_symbols (decla : declaration) :string =
+  match decla with 
+  |Declaration(inp,_,_,_,_) -> begin match inp with
+                              |Inputsymbols(su) -> get_string_from_suite su
+                              end
+;; 
+
+let get_stack_symbols (decla : declaration) :string =
+  match decla with 
+  |Declaration(_,sa,_,_,_) ->  match sa with
+                              |Stacksymbols(su) -> get_string_from_suite su
+;;
+
+let get_state_symbols (decla : declaration) :string =
+  match decla with 
+  |Declaration(_,_,st,_,_) ->  match st with
+                              |States(su) -> get_string_from_suite su
+;;
+
+let count_elem_tranlist (transis:translist) : int =
+  let rec count_elem_tranlist_rec (transis:translist) (i:int) : int =
+    match transis with 
+    |Translist(_,next) -> count_elem_tranlist_rec next (i+1)
+    |None -> i
+  in count_elem_tranlist_rec transis 0
+;;
+
+let string_to_stringlist (s:string)=
+  let rec exp i l =
+    if i < 0 then l else exp (i - 1) ((String.make 1 s.[i]) :: l) in
+  exp (String.length s - 1) []
+;;
+
+let is_deterministe (symbol:lettre_ou_vide list) (stack:string list) (state:string list) (transis:translist) :bool =
+
+  let rec is_deterministe_rec (symbol:lettre_ou_vide list) (stack:string list) (o_stack:string list)
+  (state:string list) (o_state:string list) (transis:translist) :bool =  
+    match symbol with 
+    |x::l1 -> (print_lettre (x);
+                match stack with 
+                |y::l2 -> (
+                          match state with
+                          |z::l3 -> ((count_elem_tranlist (get_transis_from_symbol (get_transis_from_stack (get_transis_from_state transis z) y) x)) < 2)  
+                                    && is_deterministe_rec symbol  stack o_stack l3 o_state transis
+                          |[] -> is_deterministe_rec symbol l2 o_stack o_state o_state transis)
+
+                |[] -> is_deterministe_rec l1 o_stack o_stack o_state o_state transis)
+                
+    |[] -> true
+    in is_deterministe_rec symbol stack stack state state transis
+;;
 
 let explode s  : lettre_ou_vide list=
   let rec exp i l =
@@ -156,10 +213,30 @@ let explode s  : lettre_ou_vide list=
 let launch (word:string) :unit = 
   let lexbuf = Lexing.from_channel stdin in 
   let ast = Parser.input Lexer.main lexbuf in 
-  let current_stack =  Stack.create() in
+  
+  let input_symbols = get_input_symbols (get_declaration ast) in
+  let stack_symbols = get_stack_symbols (get_declaration ast) in
+  let state_symbols = get_state_symbols (get_declaration ast) in
+
   let current_state =  get_initial_state (get_declaration ast) in
-  let mot = explode word in
+
+  if (not (String.contains stack_symbols (get_initial_stack (get_declaration ast)).[0])) then failwith("initial stack pas dans la liste");
+  if (not (String.contains state_symbols current_state.[0])) then failwith("Initial state pas dans la liste");
+  
+  let symbol = explode input_symbols in
+  let stack = string_to_stringlist stack_symbols in
+  let state = string_to_stringlist state_symbols in
+
   let transis = get_transis ast in
+
+  if not(is_deterministe (None::symbol) stack state transis) then failwith("Automate pas deterministe");
+
+
+  let current_stack =  Stack.create() in
+  let mot = explode word in
+  
+  
+
   Stack.push (get_initial_stack (get_declaration ast)) current_stack;
   eval_mot mot transis current_stack current_state
 ;;
