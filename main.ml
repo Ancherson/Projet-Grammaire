@@ -2,8 +2,8 @@ open Ast;;
 
 let print_stack (stack : string Stack.t ) =
   if (Stack.is_empty stack) then print_string ("current stack:\n\n")
-  else let s = Stack.top stack in
-  print_string ("current stack: ");
+  else print_string ("current stack: ");
+
   Stack.iter print_string stack;
   print_string("\n\n");
 ;;
@@ -14,6 +14,7 @@ let print_lettre (l : lettre_ou_vide) =
   |Lettre_ou_vide(s) -> print_string(s^"\n");
   |None -> print_string("\'\'\n");
 ;;
+
 let rec push_nonEmpty_stack (stack : string Stack.t) (s : nonemptystack) : string Stack.t =
   match s with
   |Monostack(st) -> Stack.push st stack; stack
@@ -59,7 +60,9 @@ let lettre_equals (l1 : lettre_ou_vide) (l2:lettre_ou_vide) : bool=
 
 let with_symbol (trans : transition) (symbol : lettre_ou_vide) : bool =
 match trans with
-|Transition(_,sy,_,_,_) -> lettre_equals sy symbol
+|Transition(_,sy,_,_,_) -> if sy = None then true
+                          else lettre_equals sy symbol
+  
 ;;
 
 let rec get_transis_from_symbol (transis : translist) (symbol : lettre_ou_vide) : translist=
@@ -87,28 +90,35 @@ let rec get_transis_from_stack (transis : translist) (stack : string) : translis
 let get_first_trans (transis : translist) : transition=
   match transis with 
   |Translist(trans,_) -> trans
-  |_ -> failwith("pas de transition dispo") (*TODO ne pas faire de failwith *)
+  |None -> failwith("pas de transition dispo")
 ;;
 
-let eval_symbol (symbol : lettre_ou_vide) (transis : translist) (stack : string Stack.t) (state : string) : string Stack.t * string =
-  let current_stack = Stack.pop stack in
+let rec eval_symbol (symbol : lettre_ou_vide) (transis : translist) (stack : string Stack.t) (state : string) : string Stack.t * string =
+  print_string ("current state: "^state^"\n");print_stack(stack); print_lettre (symbol);
+
+  if (Stack.is_empty stack && symbol = None) then (stack,state)
+
+  else if (Stack.is_empty stack) then failwith("la pile est vide sans que l’entrée soit épuisée")
+
+  else let current_stack = Stack.pop stack in
+
   match get_first_trans (get_transis_from_symbol (get_transis_from_stack (get_transis_from_state transis state) current_stack) symbol) with 
-  |Transition(_,_,_,new_state,new_stack) ->  (push_stack stack new_stack,new_state)
-  |_ -> failwith("le mots n'est pas reconnu, il n'y a pas de transitions possible") 
+  |Transition(_,sy,_,new_state,new_stack) -> if sy = None 
+                                            then eval_symbol symbol transis (push_stack stack new_stack) new_state
+                                            else (push_stack stack new_stack,new_state)
   (* TODO on faire ici les 3 cas d'erreurs *)
 ;;
 
 
  let rec eval_mot (mot : lettre_ou_vide list) (transis : translist) (stack: string Stack.t) (state:string) :unit =
- print_string ("current_state :"^state^"\n");print_stack(stack);
   match mot with
-  |symbol::reste -> print_lettre (symbol); let (new_stack,new_state) = eval_symbol symbol transis stack state in 
+  |symbol::reste -> let (new_stack,new_state) = eval_symbol symbol transis stack state in 
                     eval_mot reste transis new_stack new_state
-  |[] -> if (Stack.is_empty stack) then print_string ("mot accepte\n")
-          else begin print_lettre None; let (new_stack,new_state) = eval_symbol None transis stack state in 
-                    eval_mot [] transis new_stack new_state end
+  |[] -> if (Stack.is_empty stack)
+          then print_string("mot accepte\n")
+          else let (new_stack,new_state) = eval_symbol None transis stack state in 
+                eval_mot [] transis new_stack new_state
 ;;
-
 
 
 let get_initial_state (decla : declaration) : string =
@@ -132,8 +142,6 @@ let get_transis (auto:automate) : translist =
   match auto with 
   |Automate(_,transi) -> match transi with
                           |Transitions(transis) -> transis
-                          |_ -> failwith ("Empty transitions")
-  |_ -> failwith("problem automate")
 ;;
 
 
@@ -158,7 +166,7 @@ let init (word:string) :unit =
 let main () =
   match Sys.argv with
   |[|_;word|] ->  init word
-  |_ -> print_string "need a word"
+  |_ -> print_string "need a single word\n"
 ;;
 (* lancement de ce main *)
 let () = main () ;;
