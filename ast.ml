@@ -35,6 +35,3 @@ and stack =
 and nonemptystack = 
 | Monostack of string
 | Nonemptystack of  string * nonemptystack 
-
-
-

@@ -108,7 +108,6 @@ let rec eval_symbol (symbol : lettre_ou_vide) (transis : translist) (stack : str
   |Transition(_,sy,_,new_state,new_stack) -> if sy = None 
                                             then eval_symbol symbol transis (push_stack stack new_stack) new_state
                                             else (push_stack stack new_stack,new_state)
-  (* TODO on faire ici les 3 cas d'erreurs *)
 ;;
 
 
@@ -179,7 +178,7 @@ let count_elem_tranlist (transis:translist) : int =
   in count_elem_tranlist_rec transis 0
 ;;
 
-let string_to_stringlist (s:string)=
+let string_to_stringlist (s:string) :string list=
   let rec exp i l =
     if i < 0 then l else exp (i - 1) ((String.make 1 s.[i]) :: l) in
   exp (String.length s - 1) []
@@ -202,7 +201,7 @@ let is_deterministe (symbol:lettre_ou_vide list) (stack:string list) (state:stri
     in is_deterministe_rec (None::symbol) stack stack state state transis
 ;;
 
-let explode s  : lettre_ou_vide list=
+let explode (s:string)  : lettre_ou_vide list=
   let rec exp i l =
     if i < 0 then l else exp (i - 1) (Lettre_ou_vide(String.make 1 s.[i]) :: l) in
   exp (String.length s - 1) []
@@ -232,7 +231,6 @@ let launch (word:string) :unit =
 
   let current_stack =  Stack.create() in
   let mot = explode word in
-  
   
 
   Stack.push (get_initial_stack (get_declaration ast)) current_stack;
