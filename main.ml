@@ -41,7 +41,6 @@ let rec get_transis_from_state (transis : translist) (state : string) : translis
 ;;
 
 let lettre_equals (l1 : lettre_ou_vide) (l2:lettre_ou_vide) : bool=
-  print_lettre(l1);
   let s1 =
   match l1 with 
   |Lettre_ou_vide(s) -> s
@@ -88,14 +87,15 @@ let rec get_transis_from_stack (transis : translist) (stack : string) : translis
 let get_first_trans (transis : translist) : transition=
   match transis with 
   |Translist(trans,_) -> trans
-  |_ -> failwith("pas de transition dispo")
+  |_ -> failwith("pas de transition dispo") (*TODO ne pas faire de failwith *)
 ;;
 
 let eval_symbol (symbol : lettre_ou_vide) (transis : translist) (stack : string Stack.t) (state : string) : string Stack.t * string =
   let current_stack = Stack.pop stack in
   match get_first_trans (get_transis_from_symbol (get_transis_from_stack (get_transis_from_state transis state) current_stack) symbol) with 
   |Transition(_,_,_,new_state,new_stack) ->  (push_stack stack new_stack,new_state)
-  |_ -> failwith("le mots n'est pas reconnu, il n'y a pas de transitions possible")
+  |_ -> failwith("le mots n'est pas reconnu, il n'y a pas de transitions possible") 
+  (* TODO on faire ici les 3 cas d'erreurs *)
 ;;
 
 
@@ -104,8 +104,8 @@ let eval_symbol (symbol : lettre_ou_vide) (transis : translist) (stack : string 
   match mot with
   |symbol::reste -> print_lettre (symbol); let (new_stack,new_state) = eval_symbol symbol transis stack state in 
                     eval_mot reste transis new_stack new_state
-  |[] -> print_string("denier test ?\n"); if (Stack.is_empty stack) then print_string ("mot accepte\n")
-          else begin print_string("Non\n"); print_lettre None; let (new_stack,new_state) = eval_symbol None transis stack state in 
+  |[] -> if (Stack.is_empty stack) then print_string ("mot accepte\n")
+          else begin print_lettre None; let (new_stack,new_state) = eval_symbol None transis stack state in 
                     eval_mot [] transis new_stack new_state end
 ;;
 
